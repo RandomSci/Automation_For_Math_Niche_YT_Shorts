@@ -31,6 +31,24 @@ current_job = {"status": "idle", "progress": 0, "output": None, "error": None, "
 OUTPUT_WIDTH  = 2160
 OUTPUT_HEIGHT = 3840
 
+"""The PIL/OpenCV element renderer's font-size caps below were originally fixed
+pixel values calibrated against a 1920x1080 landscape canvas (short dimension
+1080). Scaled here off the canvas's SHORT dimension so the same visual
+proportion holds regardless of orientation or resolution -- without this, a
+220px cap that used to be roughly 20% of frame height reads as barely 6% of
+height on a 2160x3840 vertical canvas, which is exactly what made elements
+render tiny and centered with huge empty margins on the first vertical test."""
+_SHORT_DIM = min(OUTPUT_WIDTH, OUTPUT_HEIGHT)
+FONT_SIZE_FLOOR         = round(_SHORT_DIM * 60  / 1080)
+FONT_SIZE_DEFAULT       = round(_SHORT_DIM * 180 / 1080)
+FONT_SIZE_IMPACT_MIN    = round(_SHORT_DIM * 120 / 1080)
+FONT_SIZE_IMPACT_MAX    = round(_SHORT_DIM * 160 / 1080)
+FONT_SIZE_SENTENCE_MIN  = round(_SHORT_DIM * 70  / 1080)
+FONT_SIZE_SENTENCE_MAX  = round(_SHORT_DIM * 110 / 1080)
+FONT_SIZE_COUNTER_MIN   = round(_SHORT_DIM * 140 / 1080)
+FONT_SIZE_COUNTER_MAX   = round(_SHORT_DIM * 220 / 1080)
+FONT_SIZE_HARD_CAP      = FONT_SIZE_COUNTER_MAX
+
 ENCODE_PRESET = os.environ.get("FINANCE_ENCODE_PRESET", "medium")
 ENCODE_CRF    = os.environ.get("FINANCE_ENCODE_CRF", "15")
 
@@ -1383,15 +1401,16 @@ def generate_render_decisions(beats: list, topic: str) -> list:
 
     system_prompt = f"""You are an elite short-form video editor for Math Unlocked Shorts, a vertical 9:16 channel built around one mind-bending math paradox per video. You compose every frame like a motion designer -- choosing position, size, color, animation, and timing for each visual element. You are not picking from preset templates. You are designing each scene to make a NUMBER or CONCEPT visually understandable at a glance, fast enough that a viewer scrolling a feed gets it before they swipe past.
 
-Channel: a finance/numbers explainer. Audience wants to actually grasp the number -- a stat, a comparison, a growth curve, a cost. The aesthetic is CLEAN and DATA-FORWARD -- like a sharp explainer video, not a horror-trailer caption stack. Still punchy and fast-paced, just clearer.
+Channel: Math Unlocked Shorts, one mind-bending idea per video. Audience wants to feel their brain get jolted -- a paradox, a wild fact, a "wait, WHAT" number. The aesthetic is bold and punchy, built to stop a scroll, not a calm dashboard.
 
 === FONT BEHAVIOR ===
 The renderer uses Anton (ultra-condensed) as the primary font. This font is TALL and NARROW. All text is automatically rendered in ALL CAPS -- so write content in ALL CAPS.
-SIZE RULES (strictly enforced by renderer):
-- Single impact word or number: 120-160px max. Centered or slightly off-center.
-- Sentence words (2+ words in a beat): 70-110px each. Cascade across canvas.
-- number_counter elements: 140-220px (numbers need to be the visual anchor of a data beat).
-- DO NOT go above 220px for any element -- it will be clamped.
+SIZE RULES (strictly enforced by renderer, mechanically clamped to these exact ranges -- do not undersize just because a smaller number "feels safer," a small element on this tall a canvas reads as broken/empty, not restrained):
+- Single impact word or number: {FONT_SIZE_IMPACT_MIN}-{FONT_SIZE_IMPACT_MAX}px. Centered or slightly off-center. This should feel like it OWNS the frame, not sit politely inside it.
+- Sentence words (2+ words in a beat): {FONT_SIZE_SENTENCE_MIN}-{FONT_SIZE_SENTENCE_MAX}px each. Cascade across canvas.
+- number_counter elements: {FONT_SIZE_COUNTER_MIN}-{FONT_SIZE_COUNTER_MAX}px (numbers need to be the visual anchor of a data beat -- go toward the top of this range by default, this is a vertical video with a lot of height to fill).
+- DO NOT go above {FONT_SIZE_HARD_CAP}px for any element -- it will be clamped.
+- This is a TALL vertical canvas -- do not confine everything to one tiny centered dot in the middle. Use the height. A hero element can and should be large enough that it's the obvious, dominant thing on screen at a glance, not something a viewer has to lean in to find.
 - Fewer elements per scene is better. 2-4 elements max. Dense scenes are unreadable.
 
 === YOUR RENDERING ENGINE ===
@@ -1517,12 +1536,14 @@ STAGGER ALL ELEMENTS: start_offset must be less than the beat's _duration_second
 NEVER set start_offset >= _duration_seconds.
 
 === POSITIONING GRID ({OUTPUT_WIDTH}x{OUTPUT_HEIGHT} canvas) ===
-Safe zone: x: 0.08-0.92, y: 0.12-0.88.
+Safe zone: x: 0.08-0.92, y: 0.10-0.90.
 
-Three vertical bands:
-- UPPER band:  y: 0.20-0.35
-- CENTER band: y: 0.42-0.58
-- LOWER band:  y: 0.65-0.80
+This is a TALL vertical canvas -- there is much more vertical room here than a landscape frame ever had, and a beat with only one hero element should make use of that room rather than clustering everything into a small centered dot. Three vertical bands, spread wider than you'd use on a landscape frame:
+- UPPER band:  y: 0.18-0.34
+- CENTER band: y: 0.40-0.60
+- LOWER band:  y: 0.66-0.82
+
+A single hero element (a counter, a big impact word) doesn't have to sit exactly at the center of its band -- it's fine, often better, for it to be the one clearly dominant thing spanning a large visual footprint rather than a small centered element floating in empty space.
 
 === BEAT-TYPE -> COMPOSITION MAPPING ===
 
@@ -2401,7 +2422,7 @@ def validate_decisions(scenes: list, beats: list) -> list:
                 el.setdefault("start_offset", 0.0)
                 el.setdefault("duration", None)
                 el["color"] = _ensure_bright_color(el["color"])
-                el["size"] = max(60, min(safe_int(el, "size", 180), 220))
+                el["size"] = max(FONT_SIZE_FLOOR, min(safe_int(el, "size", FONT_SIZE_DEFAULT), FONT_SIZE_HARD_CAP))
 
             elif etype == "grid":
                 glyph = str(el.get("glyph", "0")).strip()
@@ -2712,13 +2733,13 @@ def render_text_overlay_opencv(video_path: str, scenes: list, beats: list,
             return
         x_pct = safe_float(el, "x", 0.5)
         y_pct = safe_float(el, "y", 0.5)
-        raw_size = safe_int(el, "size", 90)
+        raw_size = safe_int(el, "size", FONT_SIZE_DEFAULT)
         word_count = len(content.split())
         if el.get("_is_counter"):
-            size_cap = 220
+            size_cap = FONT_SIZE_HARD_CAP
         else:
-            size_cap = 160 if word_count == 1 else 110
-        size = max(20, min(raw_size, size_cap))
+            size_cap = FONT_SIZE_IMPACT_MAX if word_count == 1 else FONT_SIZE_SENTENCE_MAX
+        size = max(FONT_SIZE_FLOOR, min(raw_size, size_cap))
         color = hex_to_rgb(el.get("color", "#FFFFFF"))
         weight = el.get("weight", "black")
         outline = max(0, min(safe_int(el, "outline", 4), 4))
