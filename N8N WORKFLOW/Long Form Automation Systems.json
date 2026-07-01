@@ -1,0 +1,2885 @@
+{
+  "name": "Long Form Automation Systems",
+  "nodes": [
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n    \"type\": \"object\",\n    \"properties\": {\n        \"title\": {\n            \"type\": \"string\"\n        },\n        \"description\": {\n            \"type\": \"string\"\n        },\n        \"thumbnailPrompt\": {\n            \"type\": \"string\"\n        }\n    },\n    \"required\": [\"title\", \"description\", \"thumbnailPrompt\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        64,
+        368
+      ],
+      "id": "0936d0eb-08b2-410a-9835-e670efcd2f61",
+      "name": "Structured Output Parser1"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "randomsci",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Automation_For_Love_Niche",
+          "mode": "list",
+          "cachedResultName": "Automation_For_Love_Niche",
+          "cachedResultUrl": "https://github.com/RandomSci/Automation_For_Love_Niche"
+        },
+        "filePath": "Audio_Voice/vaults_narration.mp3",
+        "binaryData": true,
+        "commitMessage": "new_love.mp3",
+        "additionalParameters": {
+          "author": {
+            "name": "randomsci",
+            "email": "jaymeselwyn@gmail.com"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1392,
+        384
+      ],
+      "id": "45eac3a6-c042-40c6-9c91-6463318f419d",
+      "name": "Edit a file",
+      "webhookId": "250c3188-1088-47aa-a4bc-ec4224d84d49",
+      "retryOnFail": true,
+      "credentials": {
+        "githubApi": {
+          "id": "Inxqxgp5toCpBO5k",
+          "name": "GitHub account | randomsci"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.1.135:8000/generate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1840,
+        272
+      ],
+      "id": "44203479-207d-49fb-9db2-8dc5bad8fd2a",
+      "name": "Trigger Video Generation",
+      "notes": "railway link to generate: \n\nhttps://automationforloveniche-production.up.railway.app/generate"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2064,
+        272
+      ],
+      "id": "90f90b54-59c5-4b3f-9a3f-45c9d8eaa815",
+      "name": "Wait 60 seconds",
+      "webhookId": "cde6393a-2637-40d0-9d3b-2843ad877ea0"
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.1.135:8000/status",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2288,
+        272
+      ],
+      "id": "8342c02b-e0fa-4e49-8997-63356699f697",
+      "name": "Check Status",
+      "notes": "Railway Check status: \nhttps://automationforloveniche-production.up.railway.app/status"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.status }}",
+              "value2": "completed"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2512,
+        192
+      ],
+      "id": "da586eb6-e9bf-439d-b032-845fb579c15c",
+      "name": "Is Complete?"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2736,
+        368
+      ],
+      "id": "600bf5d5-2fba-4e00-9d52-f723c8a4177a",
+      "name": "Wait & Retry",
+      "webhookId": "ab4af97b-0ff0-4e50-bb97-299507204fd2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1616,
+        272
+      ],
+      "id": "aac6a4c8-c9e0-4cb7-b7cd-3522f543ad94",
+      "name": "Merge1"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "builtInTools": {},
+        "options": {
+          "maxTokens": 8000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -816,
+        496
+      ],
+      "id": "f5f85701-8a16-46a9-9379-2412a643f489",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "pfdB0ypMdoc5BFda",
+          "name": "OpenAi account | Jim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "gpt-4"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -80,
+        368
+      ],
+      "id": "476d51ed-74e6-4b2f-a383-db317740ddef",
+      "name": "OpenAI Chat Model1",
+      "credentials": {
+        "openAiApi": {
+          "id": "pfdB0ypMdoc5BFda",
+          "name": "OpenAi account | Jim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput || $('Code in JavaScript').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "You are a finance narrator writing for YouTube. You sound like a knowledgeable friend who has watched people make the same money mistakes for years. You write the way good finance YouTubers talk — direct, specific, a little impatient with excuses, never preachy. Each paragraph teaches one thing completely: what it is, why it matters, what goes wrong, and what to do. You never pad. You never motivate. You just explain clearly and move on. In the final third of the script, maintain the same direct tone as the opening — do not soften, do not summarize emotionally, do not use phrases like peace of mind, empowerment, or can't be overstated. Finish the way you started: with a concrete point, then stop. You are writing between two thousand and three thousand words. No more than three thousand. No exceptions.\n\nOUTPUT FORMAT: You must respond with ONLY a valid JSON object in this exact structure, nothing else before or after it:\n{\"scene\": \"your full narration text here\"}\n\nThe entire narration goes inside the scene value as a single string. Use \\n for paragraph breaks. No markdown outside the JSON. No explanation. Just the JSON object."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -880,
+        272
+      ],
+      "id": "27dc0cff-58ed-4ba0-ad03-c0f27f8e71b2",
+      "name": "AI Agent - Video Prompter"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Code in JavaScript1').item.json.scene }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an expert in creating high-performing YouTube content for a personal finance education channel targeting people who want straight answers about money, not motivation.\n\nYour task is to generate three outputs based on the user input, which is a finance narration script.\n\nYou must deeply understand the script first before writing anything. Identify the specific financial trap, uncomfortable truth, number, dollar amount, behavior, or consequence that the script is mainly about. Do not make generic finance content.\n\nOutput must be valid JSON with exactly these keys:\n\n\"title\"\n\"description\"\n\"thumbnailPrompt\"\n\nDo not include extra text outside the JSON.\n\nTITLE RULES:\nCreate a short, punchy YouTube video title optimized for clicks and search.\n\nThe title must:\n\n* Be maximum 60 characters\n* Reflect the specific concept in the script\n* Use a specific number, dollar amount, payment term, cost, or uncomfortable truth when available\n* Sound direct, clear, and slightly uncomfortable\n* Avoid vague motivational finance language\n* Avoid fake curiosity or exaggerated clickbait\n\nStrong title patterns:\n\"Why You Still Feel Broke After Payday\"\n\"The Math Behind Never Getting Ahead\"\n\"What Your Paycheck Actually Costs You\"\n\"The $399 Payment Keeping You Broke\"\n\"Why Low Monthly Payments Are a Trap\"\n\"The Debt Math Nobody Checks\"\n\nDESCRIPTION RULES:\nWrite a YouTube video description in 2 to 3 sentences max.\n\nThe description must:\n\n* Start by stating the core problem the video solves\n* Explain what the viewer will learn\n* End with a direct question inviting a comment about their own situation\n* Be plain, clear, and grounded\n* Avoid hype\n* Avoid \"in this video I will\"\n* Avoid emojis\n\nTHUMBNAIL PROMPT RULES:\nWrite a high-CTR thumbnail image prompt for an AI image generator.\n\nThe thumbnail must be built around the script's dominant emotional angle:\n\n* warning, danger, debt, regret, trap, hidden cost, bad decision:\n  Use deep red, black, silver, harsh shadows, cold hard light, danger glow.\n\n* growth, opportunity, smart investing, compounding, upside:\n  Use dark green, black, gold, warm glow, premium lighting.\n\n* neutral, surprising math, comparison, realization:\n  Use near-black, gold or white accent light, clean contrast.\n\nThe thumbnail must:\n\n* Use one huge visible text phrase with 2 to 4 words maximum\n* The visible text must be the main hook from the script\n* Use one supporting visual object that makes the concept instantly clear\n* Be understandable in under 1 second\n* Be dramatic, premium, and high contrast\n* Be made for YouTube CTR\n* Avoid clutter\n* Avoid small text\n* Avoid paragraphs\n* Avoid charts unless the whole script is specifically about a chart or graph\n* Avoid people and faces unless the script specifically needs a human emotion\n* Avoid generic money piles unless the script is about cash itself\n\nThe thumbnailPrompt must describe what the final image should show as a physical scene, but it may include the exact visible thumbnail text.\n\nGood supporting objects depending on the script:\n\n* Debt trap: chained wallet, cracked credit card, loan contract, car key, payment tag, broken chain, overdue bill\n* Monthly payment trap: glowing \"$399/MO\" sign, wallet wrapped in chains, red warning light\n* Paycheck problem: paycheck being sliced, empty wallet, bills pulling money away\n* Compound growth: glowing number, rising asset, green/gold light\n* Housing or car debt: house key, car key, contract, payment slip\n* Bad spending: receipt pile, shopping bag, credit card, draining wallet\n\nThe thumbnailPrompt must include:\n\n* Exact visible text in quotes\n* Background color and lighting\n* The hero object\n* The emotional mood\n* A clear instruction that there are no people, no faces, no extra labels, and no small text\n\nThumbnail prompt style examples:\n\"A dark red studio scene with a chained black wallet on the left and a glowing green '$399/MO' sign above it. Huge cracked metallic text reads 'LOW PAYMENT TRAP' in the center, lit by harsh red backlight. No people, no faces, no extra labels, no small text.\"\n\n\"A near-black studio scene with a single torn paycheck under cold white light. Huge bold text reads 'STILL BROKE' above it, with bills pulling money away into darkness. No people, no faces, no extra labels, no small text.\"\n\n\"A dark green studio scene with a glowing gold number '$100K' standing on a black floor, lit by warm gold light from behind. Huge clean text reads 'COMPOUNDING WINS'. No people, no faces, no extra labels, no small text.\"\n\nJSON RULES:\nReturn only valid JSON.\nDo not use markdown.\nDo not wrap the JSON in code fences.\nEscape quotation marks properly inside string values.\nDo not include trailing commas.\nThe title, description, and thumbnailPrompt must all match the same specific script concept.\n\nNEVER USE THESE WORDS:\n\"game-changer\"\n\"secret\"\n\"hack\"\n\"mind-blowing\"\n\"you won't believe\"\n\"peace of mind\"\n\"financial freedom\"\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -80,
+        144
+      ],
+      "id": "c33c2644-ad39-45ca-89e7-e8d8c775c547",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab12cd34-56ef-789a-bcde-f01234567890",
+              "name": "title",
+              "value": "={{ $json.output.title }}",
+              "type": "string"
+            },
+            {
+              "id": "ed89dcde-32bb-444d-b8ff-710e27e12a7a",
+              "name": "description",
+              "value": "={{ $json.output.description }}",
+              "type": "string"
+            },
+            {
+              "id": "ef90ab12-34cd-ef56-7890-abcdef012345",
+              "name": "image_prompt",
+              "value": "={{ $json.output.thumbnailPrompt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        272,
+        144
+      ],
+      "id": "2479c0df-3d17-4a2b-9730-2bfcdef9a270",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.data.outputs[0] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1392,
+        144
+      ],
+      "id": "261783b8-fed2-42d8-ae2c-724bb5b6ca14",
+      "name": "HTTP Request2"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.atlascloud.ai/api/v1/model/prediction/{{ $('Generate an image1').item.json.data.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer apikey-4195866550ff4037a1c9aa58d17f61aa"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        944,
+        64
+      ],
+      "id": "914a1586-75e8-44d2-9e38-051d7ba2ac87",
+      "name": "HTTP Request - Get Image",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.atlascloud.ai/api/v1/model/generateImage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer apikey-4195866550ff4037a1c9aa58d17f61aa"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\":\"openai/gpt-image-2/text-to-image\",\n  \"prompt\":\"{{ $json.image_prompt }}\",\n  \"size\":\"1280x720\",\n  \"quality\":\"medium\"} ",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        496,
+        144
+      ],
+      "id": "1fb3483e-9032-421e-8b0b-535b1536776e",
+      "name": "Generate an image1",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9f42b614-0873-4c9c-8378-c5d3a68b8865",
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "processing",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1168,
+        144
+      ],
+      "id": "dcb7bad2-7b66-40c0-b542-c511226f37b0",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        720,
+        144
+      ],
+      "id": "746d22d6-018d-41c8-96ed-53b2be4bb69e",
+      "name": "Wait 30 sec",
+      "webhookId": "c94c95a9-acc5-403d-a4f2-4bdd2bd51a33"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 2,5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1776,
+        80
+      ],
+      "id": "ef9b03bd-f623-42fb-afcb-3125f3b9eb24",
+      "name": "For Financial Course",
+      "disabled": true
+    },
+    {
+      "parameters": {
+        "jsCode": "const rows = $input.all().map(item => item.json);\n\nconst pending = rows.filter(r =>\n  String(r.status || \"\").toLowerCase().trim() === \"pending\"\n);\n\nif (pending.length === 0) {\n  throw new Error(\"No pending course topics in the sheet -- add more rows or this run has nothing to do.\");\n}\n\npending.sort((a, b) => {\n  const courseCompare = String(a.course_name || \"\").localeCompare(String(b.course_name || \"\"));\n  if (courseCompare !== 0) return courseCompare;\n  return Number(a.sequence_number || 0) - Number(b.sequence_number || 0);\n});\n\nconst next = pending[0];\n\nfunction numberToWords(num) {\n  num = Number(num);\n  if (!Number.isFinite(num)) return \"\";\n  if (num === 0) return \"zero\";\n  if (num < 0) return \"negative \" + numberToWords(Math.abs(num));\n\n  const ones = [\"\",\"one\",\"two\",\"three\",\"four\",\"five\",\"six\",\"seven\",\"eight\",\"nine\",\"ten\",\"eleven\",\"twelve\",\"thirteen\",\"fourteen\",\"fifteen\",\"sixteen\",\"seventeen\",\"eighteen\",\"nineteen\"];\n  const tens = [\"\",\"\",\"twenty\",\"thirty\",\"forty\",\"fifty\",\"sixty\",\"seventy\",\"eighty\",\"ninety\"];\n\n  function underThousand(n) {\n    let words = [];\n    if (n >= 100) { words.push(ones[Math.floor(n / 100)]); words.push(\"hundred\"); n %= 100; }\n    if (n >= 20) { words.push(tens[Math.floor(n / 10)]); n %= 10; }\n    if (n > 0) words.push(ones[n]);\n    return words.join(\" \");\n  }\n\n  const scales = [\n    { value: 1000000000, name: \"billion\" },\n    { value: 1000000, name: \"million\" },\n    { value: 1000, name: \"thousand\" }\n  ];\n\n  let words = [];\n  for (const scale of scales) {\n    const count = Math.floor(num / scale.value);\n    if (count > 0) { words.push(numberToWords(count)); words.push(scale.name); num %= scale.value; }\n  }\n  if (num > 0) words.push(underThousand(num));\n  return words.join(\" \").replace(/\\s+/g, \" \").trim();\n}\n\nfunction decimalToWords(rawNumber) {\n  const clean = String(rawNumber).replace(/,/g, \"\").trim();\n  if (!clean.includes(\".\")) return numberToWords(Number(clean));\n\n  const digitWords = {\"0\":\"zero\",\"1\":\"one\",\"2\":\"two\",\"3\":\"three\",\"4\":\"four\",\"5\":\"five\",\"6\":\"six\",\"7\":\"seven\",\"8\":\"eight\",\"9\":\"nine\"};\n  const [wholeRaw, decimalRaw] = clean.split(\".\");\n  const wholeWords = numberToWords(Number(wholeRaw || \"0\"));\n  const decimalWords = decimalRaw.split(\"\").map(d => digitWords[d] || \"\").filter(Boolean).join(\" \");\n  return `${wholeWords} point ${decimalWords}`.trim();\n}\n\nfunction replaceNumbersInText(text) {\n  return String(text || \"\").replace(/\\$?\\d[\\d,]*(\\.\\d+)?%?/g, match => {\n    const hasDollar = match.includes(\"$\");\n    const hasPercent = match.includes(\"%\");\n    const clean = match.replace(/[$,%]/g, \"\");\n    let words = decimalToWords(clean);\n    if (hasDollar) words += \" dollars\";\n    if (hasPercent) words += \" percent\";\n    return words.trim();\n  });\n}\n\nfunction normalizeFinanceSpeechText(text) {\n  let value = String(text || \"\");\n  value = value.replace(/\\b401\\s*\\(?k\\)?(?![a-z0-9])/gi, \"four oh one kay\");\n  value = value.replace(/\\b50\\s*\\/\\s*30\\s*\\/\\s*20\\b/g, \"fifty thirty twenty\");\n  value = value.replace(/\\b(\\d+)\\s*[-–—]\\s*(\\d+)\\b/g, (_, start, end) => `${numberToWords(start)} to ${numberToWords(end)}`);\n  return replaceNumbersInText(value);\n}\n\nconst courseName = normalizeFinanceSpeechText(next.course_name);\nconst topicTitle = normalizeFinanceSpeechText(next.topic_title);\nconst sequenceWords = numberToWords(next.sequence_number);\n\nconst sameCourseRows = rows\n  .filter(r => String(r.course_name || \"\").trim() === String(next.course_name || \"\").trim())\n  .sort((a, b) => Number(a.sequence_number || 0) - Number(b.sequence_number || 0));\n\nconst currentCourseIndex = sameCourseRows.findIndex(r =>\n  String(r.row_number || \"\") === String(next.row_number || \"\") ||\n  Number(r.sequence_number || 0) === Number(next.sequence_number || 0)\n);\n\nconst followingTopic = currentCourseIndex >= 0 ? sameCourseRows[currentCourseIndex + 1] : null;\nconst nextTopicTitle = followingTopic ? normalizeFinanceSpeechText(followingTopic.topic_title) : \"\";\n\nconst ctaInstruction = nextTopicTitle\n  ? `Close with a single sentence that makes the next lesson feel like the unavoidable next step. The next lesson is \"${nextTopicTitle}\". Name it directly and make it sound useful, not like a course announcement.`\n  : `Close with a single sentence inviting the listener to continue the course. Do not invent a next topic.`;\n\nconst video_prompt = `\nWrite a complete spoken finance narration for the following topic.\n\nCourse: \"${courseName}\"\nLesson: entry ${sequenceWords}, \"${topicTitle}\"\n\nOutput only the spoken narration. No markdown, no bullets, no headings, no symbols, no digits.\n\nEvery number must be written as spoken words. Every dollar amount, percentage, timeframe, and figure must be written exactly as a human would say it aloud.\n\n==============================\nLENGTH\n==============================\nWrite between one thousand five hundred and one thousand 800 hundred words maximum.\nDo not exceed two thousand words under any circumstances.\nEach paragraph must make one clear point with at least three sentences.\n\n==============================\nHOW TO OPEN\n==============================\n\nThe opening four sentences must follow this exact pattern.\n\nSentence one: a cold statement of a real financial consequence that happens to people who ignore this topic. State it as a fact, not a question, not a setup. Make it specific enough that someone who has experienced it would recognize it instantly.\n\nGood examples of sentence one:\n\"Running out of money three days before payday is not a cash flow problem, it is a savings problem most people refuse to name.\"\n\"The reason debt keeps coming back for people who pay it off is not bad luck, it is the absence of a buffer between income and emergencies.\"\n\"Losing a job with no savings does not give you time to think, it gives you about eleven days before the first bill goes unpaid.\"\n\nSentence two: name the exact behavior or assumption that causes the problem in sentence one. Be specific about what people do wrong, not vague.\n\nSentence three: name what is actually happening financially because of that behavior, in concrete terms.\n\nSentence four: open a tension loop by describing a situation the viewer can picture themselves in, where the problem from sentence one is quietly building before they notice it.\n\nAfter sentence four, transition into teaching the concept clearly without announcing that you are doing so.\n\n==============================\nHOW TO TEACH\n==============================\n\nTeach the concept directly after the opening four sentences.\n\nUse one real-life example if it makes the concept clearer. One is enough.\n\nShow the most common beginner mistake with this topic.\n\nExplain what the mistake costs in practical terms, not emotional terms.\n\nGive a correction. Make it specific and actionable.\n\nConnect this topic to the next financial decision the viewer will face.\n\nVary the approach paragraph by paragraph. Some paragraphs explain. Some show consequences. Some name a mistake. Some give a correction. Some connect to a broader pattern.\n\n==============================\nNUMBER PACING\n==============================\n\nUse spoken figures only when they make a point more concrete.\nMost lessons need no more than six figures total.\nAfter any paragraph containing a figure, write at least one paragraph with no figure before the next one.\nNever put two figures in the same paragraph.\n\n==============================\nHOW TO CLOSE\n==============================\n\nThe second to last paragraph summarizes the single most important shift in thinking this lesson creates. No recap of figures. One clear takeaway about behavior or understanding.\n\n${ctaInstruction}\n\n==============================\nSTYLE\n==============================\n\nWrite the way a sharp person explains something clearly to a friend who made a financial mistake. Direct. Concrete. No theatrics. No filler phrases. No repeated sentence structure. Vary the rhythm. Some sentences short. Some longer when the idea needs it.\n`.trim();\n\nreturn [\n  {\n    json: {\n      chatInput: video_prompt,\n      course_name: next.course_name,\n      sequence_number: next.sequence_number,\n      topic_title: next.topic_title,\n      row_number: next.row_number,\n      next_topic_title: followingTopic ? followingTopic.topic_title : \"\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1328,
+        80
+      ],
+      "id": "738ff625-0f33-43a0-9614-54acc30e8b9f",
+      "name": "Code in JavaScript"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs",
+          "mode": "list",
+          "cachedResultName": "Financial Reality Check",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1552,
+        80
+      ],
+      "id": "292a8b20-fb66-49ce-b175-a4415fea769b",
+      "name": "Financial Reality Check Course",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jl5qgNTdM9DGXfgZ",
+          "name": "Google Sheets account | selwyn@selwynbuilds.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs",
+          "mode": "list",
+          "cachedResultName": "Financial Reality Check Course",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "topic_title": "={{ $json.topic_title }}",
+            "status": "done"
+          },
+          "matchingColumns": [
+            "topic_title"
+          ],
+          "schema": [
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "course_name",
+              "displayName": "course_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "sequence_number",
+              "displayName": "sequence_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "topic_title",
+              "displayName": "topic_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1104,
+        80
+      ],
+      "id": "361c7b9e-5cfe-4805-8ec4-cc45d68e3520",
+      "name": "Financial Reality Check Course Update",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jl5qgNTdM9DGXfgZ",
+          "name": "Google Sheets account | selwyn@selwynbuilds.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "xKhbyU7E3bC6T89Kn26c",
+          "mode": "id"
+        },
+        "text": "={{ $json.scene }}",
+        "additionalOptions": {
+          "voiceSettings": "{\n  \"stability\": 1,\n  \"similarity_boost\": 0.8,\n  \"style\": 0,\n  \"use_speaker_boost\": false,\n  \"speed\": 1\n}"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        -304,
+        272
+      ],
+      "id": "96afc4cd-fbda-41fd-a47a-a95852b5ff2a",
+      "name": "Convert text to speech",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "o5M9oX8A5ef1CvyP",
+          "name": "ElevenLabs account | Jim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "\nconst ANGLES = [\n  \"the biggest mistakes people make\",\n  \"the smartest moves wealthy people make that nobody talks about\",\n  \"the most counterintuitive truths\",\n  \"the most dangerous myths everyone believes\",\n  \"the most overlooked opportunities\",\n  \"the warning signs people ignore until it's too late\",\n  \"the simplest habits that compound into massive results\",\n  \"the hidden costs nobody calculates\",\n];\nconst SUBJECTS = [\n  \"personal savings and emergency funds\",\n  \"investing in the stock market\",\n  \"retirement accounts and compound interest\",\n  \"credit cards and debt\",\n  \"real estate and homeownership\",\n  \"side income and passive income streams\",\n  \"taxes and tax strategy\",\n  \"budgeting and spending psychology\",\n  \"cryptocurrency and high-risk investing\",\n  \"financial independence and early retirement\",\n];\nconst FRAMINGS = [\n  \"a countdown list, counting down from the highest number to number one, building tension toward the most important point\",\n  \"a countdown list, counting up, where each item escalates in stakes until the final item is the most shocking\",\n  \"a ranked list where the narration briefly explains why each item earned its rank before revealing the next one\",\n  \"a list framed as 'before you do X, know these', where each item is a specific risk or rule\",\n  \"a list framed as a comparison: what poor, middle class, and wealthy people each do differently, item by item\",\n  \"a list framed around real numbers -- each item anchored to a specific dollar amount, percentage, or timeframe that makes it concrete\",\n];\nconst HOOKS = [\n  \"Open with a number or statistic so specific it sounds made up, then reveal it's real.\",\n  \"Open with a direct, slightly confrontational question that challenges what the listener believes about money.\",\n  \"Open by describing a relatable financial mistake or moment, then pivot into the list.\",\n  \"Open with a bold claim that sounds like a myth, then spend the video proving or disproving it.\",\n  \"Open with a 'most people think X, but actually Y' contrast.\",\n  \"Open with an urgent framing -- something the listener needs to know before their next financial decision.\",\n];\n\nfunction pick(arr) {\n  return arr[Math.floor(Math.random() * arr.length)];\n}\n\nconst angle = pick(ANGLES);\nconst subject = pick(SUBJECTS);\nconst framing = pick(FRAMINGS);\nconst hook = pick(HOOKS);\n\nconst video_prompt = (\n  `Generate a long-form finance narration script (target length: roughly two thousand words maximum — do not exceed two thousand words under any circumstances). ` +\n  `Topic: ${angle}, specifically about ${subject}. ` +\n  `Structure: ${framing}. ` +\n  `${hook} ` +\n\n  `=== NUMBER RULES — ABSOLUTE REQUIREMENTS (CRITICAL FOR ELEVENLABS) === ` +\n  `1. Spell out ALL numbers as words. Never use digits or dollar signs. ` +\n  `   Example: \"one thousand six hundred eighty dollars\" instead of \"$1,680\". ` +\n  `   \"eight percent\" instead of \"8%\". ` +\n  `   \"thirty years\" instead of \"30 years\". ` +\n  `2. Each list item must still contain at least one concrete number, but space them extremely generously. ` +\n  `3. Never put more than ONE number in any single paragraph. ` +\n  `4. Put at least two to three full paragraphs of explanation, stories, implications, or examples between any two numbers. ` +\n  `5. Never repeat the same number anywhere in the script. ` +\n  `6. Total distinct concrete numbers across the whole script should stay reasonable (ideally under 15). ` +\n\n  `=== STRICTLY FORBIDDEN === ` +\n  `- Using any digits or symbols like $ % ` +\n  `- Any sentence or paragraph with two or more numbers ` +\n  `- Chaining numbers even if split by periods ` +\n  `- Dense number sections ` +\n\n  `Clearly signal the start of each new list item naturally in the spoken narration (e.g. \"Number seven is...\" or \"The third biggest mistake...\") so the structure is obvious when heard, but keep it flowing conversationally. ` +\n  `Escalate stakes or importance as the list progresses. ` +\n  `End with a clear, concrete takeaway — the single most important action or insight from the whole list. ` +\n\n  `Tone: confident, direct, conversational but credible — like a sharp finance YouTuber who respects the audience's intelligence. ` +\n  `Output ONLY the spoken narration. No markdown, no bullets, no symbols. ` +\n  `Spelling all numbers as words + generous spacing between them is mandatory for smooth ElevenLabs pacing and accurate captions.`\n);\n\nreturn [{ json: {\n  chatInput: video_prompt,\n  angle: angle,\n  subject: subject,\n  framing: framing,\n  hook: hook\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1104,
+        368
+      ],
+      "id": "d55e7a4b-a9c2-4c13-9610-a574c0fc212a",
+      "name": "Prompt Builder"
+    },
+    {
+      "parameters": {
+        "content": "#  [Financial Reality Check Course Sheet](https://docs.google.com/spreadsheets/d/1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs/edit?usp=sharing)\n\n# [Math Unlocked Course Sheet](https://docs.google.com/spreadsheets/d/17G1LQAQlGxqbyaRBb9Vi3X_JoeJjV6gcLdXWeGUYvb4/edit?usp=sharing)",
+        "height": 304,
+        "width": 752
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -960,
+        -528
+      ],
+      "typeVersion": 1,
+      "id": "c68f126f-8baa-4d4f-a2cd-44088dfba5cb",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.errorTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1760,
+        -384
+      ],
+      "id": "a2902e8f-351f-45b4-8d93-f012435a2efe",
+      "name": "Error Trigger"
+    },
+    {
+      "parameters": {
+        "sendTo": "selwyn@selwynbuilds.com",
+        "subject": "FINANCE | Distribution ",
+        "emailType": "text",
+        "message": "Error Detected for FINANCE | Distribution \n\nN8N Link: https://energyleads.app.n8n.cloud/workflow/HDOab3BjEsxZHrVx\n\nSpreadsheet: https://docs.google.com/spreadsheets/d/1ynOW2BHEiH-y8RdjmxG3i8UCiKj8YWS5M2Px9GHsTTs/edit?gid=0#gid=0",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -1536,
+        -384
+      ],
+      "id": "8e61b3ab-fadf-454e-8617-162513e3b7d3",
+      "name": "Send a message",
+      "webhookId": "f6d6676a-292b-4986-b5f3-5c9d8e0a11f7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "FSsJULLCpVY4Tpiv",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "playlistId": "PLhGo3QA985Xt9neFkd6F3_oHdOZllSjoZ",
+        "videoId": "={{ $('Upload Video Bytes').item.json.body.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        4080,
+        144
+      ],
+      "id": "a0358a69-325f-4e3c-9b9c-3d82a3faa72d",
+      "name": "Personal Finance 101: Zero to Confident Playlist",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "gbs1wEPtYZ7OdppZ",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Finance Rality Check"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = $input.item.json.output;\n\nwhile (typeof raw === \"string\" && raw.trim().startsWith(\"{\")) {\n  try {\n    const parsed = JSON.parse(raw);\n    if (parsed.scene) {\n      raw = parsed.scene;\n    } else {\n      break;\n    }\n  } catch (e) {\n    const match = raw.match(/\"scene\"\\s*:\\s*\"([\\s\\S]+)/);\n    if (match) {\n      raw = match[1]\n        .replace(/\\\\n/g, \"\\n\")\n        .replace(/\\\\\"/g, '\"')\n        .replace(/\"\\s*}?\\s*$/, \"\");\n    }\n    break;\n  }\n}\n\nif (typeof raw === \"object\" && raw !== null && raw.scene) {\n  raw = raw.scene;\n}\n\nif (typeof raw === \"string\") {\n  raw = raw.trim();\n  if (raw.startsWith('\"') && raw.endsWith('\"')) {\n    raw = raw.slice(1, -1).replace(/\\\\n/g, \"\\n\").replace(/\\\\\"/g, '\"');\n  }\n}\n\nreturn [{ json: { scene: raw } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -528,
+        272
+      ],
+      "id": "9360d860-0d2f-4cc8-a08d-aab3420f5684",
+      "name": "Code in JavaScript1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Generate an image1').first().json.data.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer apikey-4195866550ff4037a1c9aa58d17f61aa"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3408,
+        144
+      ],
+      "id": "c5c978fe-f31e-4434-a261-ff3ad4173b79",
+      "name": "Get Thumbnail Image"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/youtube/v3/thumbnails/set",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "videoId",
+              "value": "={{ $('Upload Video Bytes').item.json.body.id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "image/png"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3856,
+        144
+      ],
+      "id": "83f7f577-7093-49d6-9c8a-763e100e239e",
+      "name": "Set Thumbnail",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "gbs1wEPtYZ7OdppZ",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Finance Rality Check"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.headers.location }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "video/mp4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3184,
+        144
+      ],
+      "id": "ed299a90-e29e-4571-8b31-528377405a5c",
+      "name": "Upload Video Bytes",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "gbs1wEPtYZ7OdppZ",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Finance Rality Check"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/youtube/v3/videos",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "uploadType",
+              "value": "resumable"
+            },
+            {
+              "name": "part",
+              "value": "snippet,status"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Upload-Content-Type",
+              "value": "video/mp4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"snippet\": {\n    \"title\": \"{{ $('Edit Fields').item.json.title }}\",\n    \"description\": \"{{ $('Edit Fields').item.json.description }}\",\n    \"categoryId\": \"27\"\n  },\n  \"status\": { \"privacyStatus\": \"public\" }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2736,
+        144
+      ],
+      "id": "52a8b773-b420-4ce9-b93c-a153d53f89c9",
+      "name": "Start Upload",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "gbs1wEPtYZ7OdppZ",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Finance Rality Check"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.1.135:8000/download",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2960,
+        144
+      ],
+      "id": "7456be2b-587c-4357-be66-49eadc2ac840",
+      "name": "Download Video",
+      "notes": "Railway download result: \nhttps://automationforloveniche-production.up.railway.app/download"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.data.outputs[0] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3632,
+        144
+      ],
+      "id": "f36f4401-18ff-47f7-98f0-21f9b0464f2c",
+      "name": "Download Image",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "content": "# [Finance Reality Check](https://youtube.com/@frcfinance?si=Q9nB7cGN-CYziL6V)",
+        "height": 800,
+        "width": 6160,
+        "color": 5
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1888,
+        -176
+      ],
+      "typeVersion": 1,
+      "id": "70311339-6f73-4f85-a2ce-d7dfb9eab87c",
+      "name": "Sticky Note2"
+    },
+    {
+      "parameters": {
+        "schemaType": "manual",
+        "inputSchema": "{\n    \"type\": \"object\",\n    \"properties\": {\n        \"title\": {\n            \"type\": \"string\"\n        },\n        \"description\": {\n            \"type\": \"string\"\n        },\n        \"thumbnailPrompt\": {\n            \"type\": \"string\"\n        }\n    },\n    \"required\": [\"title\", \"description\", \"thumbnailPrompt\"]\n}\n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+      "typeVersion": 1.3,
+      "position": [
+        32,
+        1632
+      ],
+      "id": "66109e9c-d8b3-4d66-826e-cb4d1fa665dc",
+      "name": "Structured Output Parser"
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "operation": "edit",
+        "owner": {
+          "__rl": true,
+          "value": "randomsci",
+          "mode": "name"
+        },
+        "repository": {
+          "__rl": true,
+          "value": "Automation_For_Math_Niche",
+          "mode": "list",
+          "cachedResultName": "Automation_For_Math_Niche",
+          "cachedResultUrl": "https://github.com/RandomSci/Automation_For_Math_Niche"
+        },
+        "filePath": "Audio_Voice/vaults_narration.mp3",
+        "binaryData": true,
+        "commitMessage": "Math Narration Update",
+        "additionalParameters": {
+          "author": {
+            "name": "randomsci",
+            "email": "jaymeselwyn@gmail.com"
+          }
+        }
+      },
+      "type": "n8n-nodes-base.github",
+      "typeVersion": 1.1,
+      "position": [
+        1376,
+        1648
+      ],
+      "id": "afa7d3e0-518f-46bc-8345-b0fbb7da1f69",
+      "name": "Edit a file1",
+      "webhookId": "250c3188-1088-47aa-a4bc-ec4224d84d49",
+      "retryOnFail": true,
+      "credentials": {
+        "githubApi": {
+          "id": "Inxqxgp5toCpBO5k",
+          "name": "GitHub account | randomsci"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://192.168.1.135:8000/generate",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1824,
+        1536
+      ],
+      "id": "68b39fb9-757c-4345-8e00-4a737681a26d",
+      "name": "Trigger Video Generation1",
+      "notes": "railway link to generate: \n\nhttps://automationforloveniche-production.up.railway.app/generate"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2048,
+        1536
+      ],
+      "id": "2d7c83d3-69db-4560-8c2d-53f3185160fa",
+      "name": "Wait 60 seconds1",
+      "webhookId": "cde6393a-2637-40d0-9d3b-2843ad877ea0"
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.1.135:8000/status",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2272,
+        1536
+      ],
+      "id": "6851b498-d74f-4b83-b65b-1fe48e3cb21b",
+      "name": "Check Status1",
+      "notes": "Railway Check status: \nhttps://automationforloveniche-production.up.railway.app/status"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.status }}",
+              "value2": "completed"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        2496,
+        1392
+      ],
+      "id": "aaf79efa-745f-4309-9317-73c743038d85",
+      "name": "Is Complete?1"
+    },
+    {
+      "parameters": {
+        "amount": 60
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        2720,
+        1632
+      ],
+      "id": "c5c89b8f-9540-46ff-95ac-e6f73d6bbb23",
+      "name": "Wait & Retry1",
+      "webhookId": "ab4af97b-0ff0-4e50-bb97-299507204fd2"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        1600,
+        1536
+      ],
+      "id": "c7b7a317-3a32-4ebc-b21b-cacefbe9eb92",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-5",
+          "mode": "list",
+          "cachedResultName": "gpt-5"
+        },
+        "builtInTools": {},
+        "options": {
+          "maxTokens": 8000
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -832,
+        1760
+      ],
+      "id": "7a592123-8aaa-4be8-8f67-b4d828fe4d6d",
+      "name": "OpenAI Chat Model2",
+      "credentials": {
+        "openAiApi": {
+          "id": "pfdB0ypMdoc5BFda",
+          "name": "OpenAi account | Jim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "gpt-4"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        -96,
+        1632
+      ],
+      "id": "eace652d-47e3-49ca-ad36-8fa9d7ee11b2",
+      "name": "OpenAI Chat Model3",
+      "credentials": {
+        "openAiApi": {
+          "id": "pfdB0ypMdoc5BFda",
+          "name": "OpenAi account | Jim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.chatInput || $('Code in JavaScript2').item.json.chatInput }}",
+        "options": {
+          "systemMessage": "You are a math and machine learning narrator writing for YouTube. You sound like someone who genuinely understands this material at a deep level and has watched students hit the same walls for years. You write the way the best math YouTubers talk — precise, intuitive, a little impatient with hand-waving, never condescending. You do not simplify by lying. You simplify by finding the right analogy, the right visual, the right angle that makes the concept click without distorting it. Each paragraph teaches one thing completely: what it is, why it matters, where intuition breaks down, and what the correct mental model actually is. You never pad. You never motivate. You just explain clearly and move on. In the final third of the script, maintain the same direct tone as the opening — do not soften, do not summarize emotionally, do not use phrases like beautiful, elegant, powerful, or life-changing. Finish the way you started: with a concrete point, then stop. You are writing between two thousand and three thousand words. No more than three thousand. No exceptions.\nOUTPUT FORMAT: You must respond with ONLY a valid JSON object in this exact structure, nothing else before or after it:\n{\"scene\": \"your full narration text here\"}\nThe entire narration goes inside the scene value as a single string. Use \\n for paragraph breaks. No markdown outside the JSON. No explanation. Just the JSON object."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -896,
+        1536
+      ],
+      "id": "8df8edca-56be-4e4f-bbf8-27c6453b9ef5",
+      "name": "AI Agent - Video Prompter1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $('Code in JavaScript3').item.json.scene }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "You are an expert in creating high-performing YouTube content for a math and machine learning education channel targeting people who want genuine understanding, not textbook explanations.\n\nYour task is to generate three outputs based on the user input, which is a math or machine learning narration script.\n\nYou must deeply understand the script first before writing anything. Identify the specific concept, misconception, mental model, or mathematical truth that the script is mainly about. Do not make generic math content.\n\nOutput must be valid JSON with exactly these keys:\n\n\"title\"\n\"description\"\n\"thumbnailPrompt\"\n\nDo not include extra text outside the JSON.\n\nTITLE RULES:\nCreate a short, punchy YouTube video title optimized for clicks and search.\n\nThe title must create a reason to click, not just label the lesson.\n\nThe title must:\n\n* Be maximum 60 characters\n* Reflect the specific concept in the script\n* Name the mistake, misconception, hidden cost, or corrected mental model\n* Sound direct, clear, and slightly confrontational\n* Make the viewer feel their current understanding might be incomplete or wrong\n* Use a specific math term, formula reference, model name, or uncomfortable truth when available\n* Avoid generic course-style titles\n* Avoid textbook chapter titles\n* Avoid vague motivational math language\n* Avoid fake curiosity or exaggerated clickbait\n* Avoid titles that only name the topic without tension\n* Avoid hedging words like \"can\", \"might\", \"may\" — state the tension as fact\n\nDo not write titles like:\n\"Statistics: Beyond Averages\"\n\"Introduction to Probability\"\n\"Understanding Linear Algebra\"\n\"Machine Learning Explained\"\n\"Basic Calculus Concepts\"\n\"Why Your Average Can Mislead You\"\n\"Statistics and What It Really Means\"\n\nPrefer titles that expose a mistake or tension as a hard fact:\n\"Why Averages Lie About Your Data\"\n\"Stop Trusting the Average\"\n\"What Variance Is Really Telling You\"\n\"Why Your P-Value Is Not Proof\"\n\"The Derivative Is Not Just a Formula\"\n\"Why Matrix Multiplication Feels Wrong\"\n\"What Gradient Descent Is Actually Doing\"\n\"Why Overfitting Looks Good at First\"\n\"What Backpropagation Is Really Computing\"\n\"Why Attention Is Not Just Focus\"\n\"The Average That Hides Everything\"\n\"Your Data Is Lying and You Don't Know It\"\n\nStrong title patterns:\n\"Why [concept] Misleads You\"\n\"Stop Trusting [common shortcut]\"\n\"What [concept] Is Really Measuring\"\n\"Why [concept] Is Not [wrong belief]\"\n\"The [concept] Mistake That Breaks [result]\"\n\"What [model/process] Is Actually Doing\"\n\"Why Most People Misread [math object]\"\n\"The [concept] Everyone Gets Wrong\"\n\"[concept] Is Always [uncomfortable truth]\"\n\nDESCRIPTION RULES:\nWrite a YouTube video description in 2 to 3 sentences max.\n\nThe description must sound like a clear reason to watch, not a course summary.\n\nSentence 1:\nState the exact misconception, mistake, or gap the video fixes. Be specific — name what people get wrong and what goes wrong because of it.\n\nSentence 2:\nExplain the corrected understanding the viewer will have after watching. What will they see differently? What breaks when they don't know this?\n\nSentence 3:\nEnd with a direct question inviting a comment about where they personally got stuck or misled.\n\nThe description must:\n\n* Be plain, clear, and grounded\n* Create urgency by showing what breaks when the concept is misunderstood\n* Mention the specific concept from the script\n* Avoid hype\n* Avoid emojis\n* Avoid vague learning promises like \"learn about\" or \"understand better\"\n* Avoid sounding like a textbook description or course syllabus\n\nNEVER write:\n\"This video will...\"\n\"In this video I will...\"\n\"This lesson will teach you...\"\n\"You will learn about...\"\n\"This video explores...\"\n\nBad description:\n\"Understanding distributions, sample sizes, and inference can help you make sense of complex data instead of relying on misleading averages. Learn the difference that going beyond simple calculations can make.\"\n\nAlso bad:\n\"Most people view averages as complete representations of their data, oblivious that this simplification can hide significant details. This video will expose the danger of over-simplifying data.\"\n\nGood description:\n\"Most people trust an average without checking the distribution behind it, and that single number hides outliers, skew, and sampling bias that change everything. Once you see the distribution instead of just the center, the average stops being a fact and becomes a question. Where did a summary number steer you wrong?\"\n\nTHUMBNAIL PROMPT RULES:\nWrite a high-CTR thumbnail image prompt for an AI image generator.\n\nThe thumbnail must be built around the script's dominant visual angle:\n\n* misconception, confusion, wrong intuition, common mistake:\n  Use deep navy, black, harsh cold light, sharp contrast, red or white accent.\n\n* insight, correct mental model, clarity, understanding unlocked:\n  Use dark navy, gold, warm glow, clean premium lighting.\n\n* transformation, before and after, realization:\n  Use split dark scene, one side cold light one side warm gold, sharp divide.\n\nThe thumbnail must:\n\n* Use one huge visible text phrase with 2 to 3 words maximum\n* Never use the full video title as the thumbnail text\n* Never use more than one visible text phrase\n* The visible text must be a hook — a short fragment that creates instant tension or curiosity\n* Use one supporting visual object that makes the concept instantly clear\n* Be understandable in under 1 second\n* Be dramatic, premium, and high contrast\n* Be made for YouTube CTR\n* Avoid clutter\n* Avoid small text\n* Avoid paragraphs\n* Avoid people and faces\n* Avoid generic calculator or chalkboard images unless the script specifically needs them\n* Avoid making every thumbnail look like the same template — vary the hero object, color emphasis, and composition across videos\n\nThe thumbnailPrompt must describe what the final image should show as a physical scene, but it may include the exact visible thumbnail text.\n\nGood supporting objects depending on the script:\n\n* Averages vs distributions: glowing skewed bell curve with a single outlier dot far from the peak\n* Vectors and transformations: glowing arrows in space, warped grid, transformation field\n* Matrices: glowing grid of numbers, determinant shrinking space, matrix brackets\n* Derivatives: smooth curve with tangent line glowing, slope highlighted\n* Gradient descent: dark 3D loss surface with glowing path descending to minimum\n* Neural networks: glowing node diagram, backprop arrows, weight connections\n* Probability distributions: glowing bell curve, area under curve highlighted\n* P-values: glowing bell curve with a tiny red tail area\n* Attention mechanism: glowing connection grid between tokens\n* Eigenvalues: vector unchanged by transformation, glowing fixed direction\n* Overfitting: two curves diverging, training vs validation split\n* Sampling bias: two groups shown as dots, one group missing entirely from a frame\n* Correlation vs causation: two lines moving together with a question mark between them\n\nThe thumbnailPrompt must include:\n\n* Exact visible text in quotes\n* Background color and lighting\n* One hero object only\n* The emotional mood — cold and alarming for mistakes, warm and clear for insight\n* A clear instruction that there are no people, no faces, no extra labels, and no small text\n\nThumbnail prompt style examples:\n\"A deep navy studio scene with a glowing 3D loss surface descending to a bright gold minimum point. Huge bold text reads 'LOSS FALLS' in cold white light from above. No people, no faces, no extra labels, no small text.\"\n\n\"A near-black scene with two glowing arrows: one transformed and warped, one unchanged and gold. Huge text reads 'FIXED DIRECTION' with sharp cold blue backlight. No people, no faces, no extra labels, no small text.\"\n\n\"A dark navy scene with a glowing skewed bell curve, a single bright outlier dot far to the right connected to a thin vertical line. Huge white text reads 'AVERAGE LIES' in harsh cold light. No people, no faces, no extra labels, no small text.\"\n\n\"A deep navy scene with a glowing bell curve, the tiny red tail area on the right side lit like an alarm. Huge white text reads 'NOT PROOF' above it. No people, no faces, no extra labels, no small text.\"\n\nJSON RULES:\nReturn only valid JSON.\nDo not use markdown.\nDo not wrap the JSON in code fences.\nEscape quotation marks properly inside string values.\nDo not include trailing commas.\nThe title, description, and thumbnailPrompt must all match the same specific script concept.\n\nNEVER USE THESE WORDS:\n\"game-changer\"\n\"secret\"\n\"hack\"\n\"mind-blowing\"\n\"you won't believe\"\n\"beautiful\"\n\"elegant\"\n\"powerful\"\n\"life-changing\"\n\"can mislead\"\n\"might mislead\"\n\"may mislead\"\n\"this video will\"\n\"in this video\"\n\"this lesson will\"\n\"you will learn\"\n\"this video explores\""
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -96,
+        1408
+      ],
+      "id": "bbdc8ad2-1789-48a8-94fb-5172c1a670ff",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ab12cd34-56ef-789a-bcde-f01234567890",
+              "name": "title",
+              "value": "={{ $json.output.title }}",
+              "type": "string"
+            },
+            {
+              "id": "ed89dcde-32bb-444d-b8ff-710e27e12a7a",
+              "name": "description",
+              "value": "={{ $json.output.description }}",
+              "type": "string"
+            },
+            {
+              "id": "ef90ab12-34cd-ef56-7890-abcdef012345",
+              "name": "image_prompt",
+              "value": "={{ $json.output.thumbnailPrompt }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        256,
+        1408
+      ],
+      "id": "3744c9c9-2841-41e1-8068-41793b686735",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.data.outputs[0] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1376,
+        1408
+      ],
+      "id": "88029795-3648-4299-8ad9-b260c21be302",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "url": "=https://api.atlascloud.ai/api/v1/model/prediction/{{ $('Generate an image').item.json.data.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer apikey-4195866550ff4037a1c9aa58d17f61aa"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        928,
+        1328
+      ],
+      "id": "774aa364-6e6f-4add-ada9-da0458934026",
+      "name": "HTTP Request - Get Image1",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "maxTries": 5
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.atlascloud.ai/api/v1/model/generateImage",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer apikey-4195866550ff4037a1c9aa58d17f61aa"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"model\":\"openai/gpt-image-2/text-to-image\",\n  \"prompt\":\"{{ $json.image_prompt }}\",\n  \"size\":\"1280x720\",\n  \"quality\":\"medium\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        480,
+        1408
+      ],
+      "id": "834dec65-5dd6-408e-98f7-e6bbf533b3fe",
+      "name": "Generate an image",
+      "retryOnFail": true,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "9f42b614-0873-4c9c-8378-c5d3a68b8865",
+              "leftValue": "={{ $json.data.status }}",
+              "rightValue": "processing",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1152,
+        1408
+      ],
+      "id": "4dc11ead-4201-4d03-a875-aeea29955566",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "amount": 30
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        704,
+        1408
+      ],
+      "id": "6cea808c-f1fe-4843-a1f5-9e6785dac4a2",
+      "name": "Wait 30 sec1",
+      "webhookId": "c94c95a9-acc5-403d-a4f2-4bdd2bd51a33"
+    },
+    {
+      "parameters": {
+        "jsCode": "const inputItems = $input.all();\n\nconst rows = inputItems.map((item, index) => {\n  return {\n    ...item.json,\n    __inputIndex: index\n  };\n});\n\nfunction getRowPosition(row) {\n  const possibleRowNumbers = [\n    row.row_number,\n    row.rowNumber,\n    row[\"row_number\"],\n    row[\"Row Number\"],\n    row[\"row number\"],\n    row.__rowNumber\n  ];\n\n  for (const value of possibleRowNumbers) {\n    const num = Number(value);\n    if (Number.isFinite(num) && num > 0) {\n      return num;\n    }\n  }\n\n  return row.__inputIndex + 1;\n}\n\nconst pending = rows.filter(r =>\n  String(r.status || \"\").toLowerCase().trim() === \"pending\"\n);\n\nif (pending.length === 0) {\n  throw new Error(\"No pending course topics in the sheet -- add more rows or this run has nothing to do.\");\n}\n\n// IMPORTANT:\n// This sorts by actual sheet position, not by course name or sequence number.\n// So it starts from the top pending row.\npending.sort((a, b) => {\n  return getRowPosition(a) - getRowPosition(b);\n});\n\nconst next = pending[0];\n\nfunction numberToWords(num) {\n  num = Number(num);\n  if (!Number.isFinite(num)) return \"\";\n  if (num === 0) return \"zero\";\n  if (num < 0) return \"negative \" + numberToWords(Math.abs(num));\n\n  const ones = [\"\",\"one\",\"two\",\"three\",\"four\",\"five\",\"six\",\"seven\",\"eight\",\"nine\",\"ten\",\"eleven\",\"twelve\",\"thirteen\",\"fourteen\",\"fifteen\",\"sixteen\",\"seventeen\",\"eighteen\",\"nineteen\"];\n  const tens = [\"\",\"\",\"twenty\",\"thirty\",\"forty\",\"fifty\",\"sixty\",\"seventy\",\"eighty\",\"ninety\"];\n\n  function underThousand(n) {\n    let words = [];\n\n    if (n >= 100) {\n      words.push(ones[Math.floor(n / 100)]);\n      words.push(\"hundred\");\n      n %= 100;\n    }\n\n    if (n >= 20) {\n      words.push(tens[Math.floor(n / 10)]);\n      n %= 10;\n    }\n\n    if (n > 0) {\n      words.push(ones[n]);\n    }\n\n    return words.join(\" \");\n  }\n\n  const scales = [\n    { value: 1000000000, name: \"billion\" },\n    { value: 1000000, name: \"million\" },\n    { value: 1000, name: \"thousand\" }\n  ];\n\n  let words = [];\n\n  for (const scale of scales) {\n    const count = Math.floor(num / scale.value);\n\n    if (count > 0) {\n      words.push(numberToWords(count));\n      words.push(scale.name);\n      num %= scale.value;\n    }\n  }\n\n  if (num > 0) {\n    words.push(underThousand(num));\n  }\n\n  return words.join(\" \").replace(/\\s+/g, \" \").trim();\n}\n\nfunction decimalToWords(rawNumber) {\n  const clean = String(rawNumber).replace(/,/g, \"\").trim();\n\n  if (!clean.includes(\".\")) {\n    return numberToWords(Number(clean));\n  }\n\n  const digitWords = {\n    \"0\": \"zero\",\n    \"1\": \"one\",\n    \"2\": \"two\",\n    \"3\": \"three\",\n    \"4\": \"four\",\n    \"5\": \"five\",\n    \"6\": \"six\",\n    \"7\": \"seven\",\n    \"8\": \"eight\",\n    \"9\": \"nine\"\n  };\n\n  const [wholeRaw, decimalRaw] = clean.split(\".\");\n  const wholeWords = numberToWords(Number(wholeRaw || \"0\"));\n\n  const decimalWords = decimalRaw\n    .split(\"\")\n    .map(d => digitWords[d] || \"\")\n    .filter(Boolean)\n    .join(\" \");\n\n  return `${wholeWords} point ${decimalWords}`.trim();\n}\n\nfunction replaceNumbersInText(text) {\n  return String(text || \"\").replace(/\\$?\\d[\\d,]*(\\.\\d+)?%?/g, match => {\n    const hasDollar = match.includes(\"$\");\n    const hasPercent = match.includes(\"%\");\n    const clean = match.replace(/[$,%]/g, \"\");\n\n    let words = decimalToWords(clean);\n\n    if (hasDollar) words += \" dollars\";\n    if (hasPercent) words += \" percent\";\n\n    return words.trim();\n  });\n}\n\nfunction normalizeMathSpeechText(text) {\n  let value = String(text || \"\");\n\n  value = value.replace(/\\bR\\^2\\b/gi, \"R squared\");\n  value = value.replace(/\\bx\\^2\\b/gi, \"x squared\");\n  value = value.replace(/\\bn\\^2\\b/gi, \"n squared\");\n  value = value.replace(/\\bO\\(n\\^2\\)\\b/gi, \"O of n squared\");\n  value = value.replace(/\\bO\\(n\\s*log\\s*n\\)\\b/gi, \"O of n log n\");\n  value = value.replace(/\\bO\\(n\\)\\b/gi, \"O of n\");\n  value = value.replace(/\\b(\\d+)\\s*x\\s*(\\d+)\\b/g, (_, a, b) => `${numberToWords(Number(a))} by ${numberToWords(Number(b))}`);\n  value = value.replace(/\\b(\\d+)\\s*[-–—]\\s*(\\d+)\\b/g, (_, start, end) => `${numberToWords(start)} to ${numberToWords(end)}`);\n\n  return replaceNumbersInText(value);\n}\n\nconst courseName = normalizeMathSpeechText(next.course_name);\nconst topicTitle = normalizeMathSpeechText(next.topic_title);\nconst sequenceWords = numberToWords(next.sequence_number);\n\nconst sameCourseRows = rows\n  .filter(r =>\n    String(r.course_name || \"\").trim() === String(next.course_name || \"\").trim()\n  )\n  .sort((a, b) => {\n    const seqA = Number(a.sequence_number || 0);\n    const seqB = Number(b.sequence_number || 0);\n\n    if (seqA !== seqB) return seqA - seqB;\n\n    return getRowPosition(a) - getRowPosition(b);\n  });\n\nconst currentCourseIndex = sameCourseRows.findIndex(r => {\n  const sameRow =\n    String(getRowPosition(r)) === String(getRowPosition(next));\n\n  const sameSequence =\n    Number(r.sequence_number || 0) === Number(next.sequence_number || 0);\n\n  return sameRow || sameSequence;\n});\n\nconst followingTopic =\n  currentCourseIndex >= 0\n    ? sameCourseRows[currentCourseIndex + 1]\n    : null;\n\nconst nextTopicTitle = followingTopic\n  ? normalizeMathSpeechText(followingTopic.topic_title)\n  : \"\";\n\nconst ctaInstruction = nextTopicTitle\n  ? `Close with a single sentence that makes the next lesson feel like the unavoidable next step. The next lesson is \"${nextTopicTitle}\". Name it directly and make it sound useful, not like a course announcement.`\n  : `Close with a single sentence inviting the listener to continue the course. Do not invent a next topic.`;\n\nconst video_prompt = `\nWrite a complete spoken math narration for the following topic.\n\nCourse: \"${courseName}\"\nLesson: entry ${sequenceWords}, \"${topicTitle}\"\n\nOutput only the spoken narration. No markdown, no bullets, no headings, no symbols, no digits.\n\nEvery number must be written as spoken words. Every figure, formula reference, and measurement must be written exactly as a human would say it aloud.\n\n==============================\nLENGTH\n==============================\nWrite between one thousand five hundred and one thousand seven hundred words maximum.\nDo not exceed two thousand words under any circumstances.\nEach paragraph must make one clear point with at least three sentences.\n\n==============================\nHOW TO OPEN\n==============================\n\nThe opening four sentences must follow this exact pattern.\n\nSentence one: a cold statement of a real consequence that happens to people who misunderstand this concept. State it as a fact, not a question, not a setup. Make it specific enough that a student who has struggled with it would recognize it instantly.\n\nGood examples of sentence one:\n\"Most people can calculate an average but have no idea whether that average actually represents the data they are looking at.\"\n\"Building a machine learning model without understanding variance means you will overfit every single time and never know why.\"\n\"The reason matrix multiplication feels arbitrary is that nobody ever showed you what it is actually doing to the space.\"\n\nSentence two: name the exact misconception or gap in understanding that causes the problem in sentence one. Be specific about what people get wrong, not vague.\n\nSentence three: name what is actually happening mathematically because of that misconception, in concrete terms.\n\nSentence four: open a tension loop by describing a situation the viewer can picture themselves in, where the gap from sentence one is quietly causing problems before they notice it.\n\nAfter sentence four, transition into teaching the concept clearly without announcing that you are doing so.\n\n==============================\nHOW TO TEACH\n==============================\n\nTeach the concept directly after the opening four sentences.\n\nUse one concrete real-world example if it makes the concept clearer. One is enough.\n\nShow the most common beginner mistake with this topic.\n\nExplain what the mistake costs in practical terms — wrong answers, broken models, failed intuition.\n\nGive a correction. Make it specific and actionable.\n\nConnect this concept to the next mathematical idea the viewer will encounter.\n\nVary the approach paragraph by paragraph. Some paragraphs explain. Some show consequences. Some name a mistake. Some give a correction. Some connect to a broader pattern.\n\n==============================\nNUMBER AND FORMULA PACING\n==============================\n\nUse spoken figures only when they make a point more concrete.\nMost lessons need no more than six figures total.\nAfter any paragraph containing a figure, write at least one paragraph with no figure before the next one.\nNever put two figures in the same paragraph.\nNever read out raw formula notation — translate it into plain spoken language.\n\n==============================\nHOW TO CLOSE\n==============================\n\nThe second to last paragraph summarizes the single most important shift in thinking this lesson creates. No recap of figures. One clear takeaway about intuition or understanding.\n\n${ctaInstruction}\n\n==============================\nSTYLE\n==============================\n\nWrite the way a sharp person who genuinely understands this topic explains it clearly to someone who is struggling with it. Direct. Concrete. No theatrics. No filler phrases. No repeated sentence structure. Vary the rhythm. Some sentences short. Some longer when the idea needs it.\n`.trim();\n\nreturn [\n  {\n    json: {\n      chatInput: video_prompt,\n      course_name: next.course_name,\n      sequence_number: next.sequence_number,\n      topic_title: next.topic_title,\n      row_number: next.row_number || getRowPosition(next),\n      sheet_position: getRowPosition(next),\n      next_topic_title: followingTopic ? followingTopic.topic_title : \"\"\n    }\n  }\n];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1344,
+        1440
+      ],
+      "id": "50d4b23e-9a21-4040-a290-a59b4c581d40",
+      "name": "Code in JavaScript2"
+    },
+    {
+      "parameters": {
+        "resource": "speech",
+        "voice": {
+          "__rl": true,
+          "value": "xKhbyU7E3bC6T89Kn26c",
+          "mode": "id"
+        },
+        "text": "={{ $json.scene }}",
+        "additionalOptions": {
+          "voiceSettings": "{\n  \"stability\": 1,\n  \"similarity_boost\": 0.8,\n  \"style\": 0,\n  \"use_speaker_boost\": false,\n  \"speed\": 1\n}"
+        },
+        "requestOptions": {}
+      },
+      "type": "@elevenlabs/n8n-nodes-elevenlabs.elevenLabs",
+      "typeVersion": 1,
+      "position": [
+        -320,
+        1536
+      ],
+      "id": "908d87f1-9cf0-4b2f-80cf-a235cd3dba07",
+      "name": "Convert text to speech1",
+      "credentials": {
+        "elevenLabsApi": {
+          "id": "o5M9oX8A5ef1CvyP",
+          "name": "ElevenLabs account | Jim"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const ANGLES = [\n  \"the biggest mistakes beginners make\",\n  \"the most counterintuitive truths that change how you see the concept\",\n  \"the most dangerous misconceptions everyone starts with\",\n  \"the most overlooked connections between ideas\",\n  \"the warning signs your understanding is shallower than you think\",\n  \"the simplest mental models that unlock everything else\",\n  \"the hidden structure nobody shows you in textbooks\",\n  \"the smartest ways to build genuine intuition fast\",\n];\n\nconst SUBJECTS = [\n  \"probability and statistical thinking\",\n  \"vectors and linear transformations\",\n  \"derivatives and rates of change\",\n  \"matrix operations and their geometric meaning\",\n  \"loss functions and optimization in machine learning\",\n  \"probability distributions and what they actually represent\",\n  \"eigenvalues and eigenvectors\",\n  \"backpropagation and how neural networks learn\",\n  \"gradient descent and why it works\",\n  \"the attention mechanism in transformers\",\n];\n\nconst FRAMINGS = [\n  \"a countdown list counting down from the highest number to number one building tension toward the most important insight\",\n  \"a countdown list counting up where each item escalates in depth until the final item is the most mind-shifting\",\n  \"a ranked list where the narration briefly explains why each item earned its rank before revealing the next one\",\n  \"a list framed as before you go further in math or machine learning know these where each item is a specific gap or rule\",\n  \"a list framed as a comparison: what a confused beginner a competent student and an expert each understand differently item by item\",\n  \"a list framed around concrete examples where each item is anchored to a specific scenario equation or visual that makes it click\",\n];\n\nconst HOOKS = [\n  \"Open with a specific claim about how this concept works that sounds obviously true but is actually completely wrong then spend the video correcting it.\",\n  \"Open with a direct slightly confrontational statement that challenges what the listener thinks they already understand about this topic.\",\n  \"Open by describing the exact moment of confusion most people hit when they first encounter this concept then pivot into why it does not have to be that way.\",\n  \"Open with a bold claim that sounds like an exaggeration then spend the video proving it is completely accurate.\",\n  \"Open with a most people think X but actually Y contrast that reframes the entire concept before the list begins.\",\n  \"Open with an urgent framing: something the listener needs to understand before they go any further in mathematics or machine learning.\",\n];\n\nfunction pick(arr) {\n  return arr[Math.floor(Math.random() * arr.length)];\n}\n\nconst angle = pick(ANGLES);\nconst subject = pick(SUBJECTS);\nconst framing = pick(FRAMINGS);\nconst hook = pick(HOOKS);\n\nconst video_prompt = (\n  `Generate a long-form math and machine learning narration script (target length: roughly two thousand words maximum — do not exceed two thousand words under any circumstances). ` +\n  `Topic: ${angle}, specifically about ${subject}. ` +\n  `Structure: ${framing}. ` +\n  `${hook} ` +\n\n  `=== NUMBER AND FORMULA RULES — ABSOLUTE REQUIREMENTS (CRITICAL FOR ELEVENLABS) === ` +\n  `1. Spell out ALL numbers as words. Never use digits or symbols. ` +\n  `   Example: \"two point seven one eight\" instead of \"2.718\". ` +\n  `   \"ninety percent\" instead of \"90%\". ` +\n  `   \"three by three matrix\" instead of \"3x3 matrix\". ` +\n  `2. Never read raw formula notation. Translate every formula into plain spoken language. ` +\n  `   Example: \"the output equals the sigmoid of the weighted sum of inputs\" not \"y equals sigma of W times x plus b\". ` +\n  `3. Each list item must contain at least one concrete example or number but space them extremely generously. ` +\n  `4. Never put more than ONE number or formula reference in any single paragraph. ` +\n  `5. Put at least two to three full paragraphs of explanation intuition or example between any two numbers. ` +\n  `6. Never repeat the same number anywhere in the script. ` +\n  `7. Total distinct concrete numbers across the whole script should stay reasonable ideally under fifteen. ` +\n\n  `=== STRICTLY FORBIDDEN === ` +\n  `- Using any digits or symbols like % * ^ = ` +\n  `- Any sentence or paragraph with two or more numbers ` +\n  `- Chaining numbers even if split by periods ` +\n  `- Dense formula sections that read like a textbook ` +\n  `- Jargon without immediate plain-language explanation ` +\n\n  `Clearly signal the start of each new list item naturally in the spoken narration for example \"Number seven is...\" or \"The third mistake...\" so the structure is obvious when heard but keep it flowing conversationally. ` +\n  `Escalate depth or importance as the list progresses. ` +\n  `End with a clear concrete takeaway: the single most important shift in thinking or intuition from the whole list. ` +\n\n  `Tone: sharp direct and conversational but precise — like someone who genuinely understands this deeply and wants the listener to feel the same clarity they do. Not a lecturer. Not a textbook. A person who gets it explaining it to someone who almost gets it. ` +\n  `Output ONLY the spoken narration. No markdown no bullets no symbols. ` +\n  `Spelling all numbers as words and translating all formulas into spoken language is mandatory for smooth ElevenLabs pacing and accurate captions.`\n);\n\nreturn [{ json: {\n  chatInput: video_prompt,\n  angle: angle,\n  subject: subject,\n  framing: framing,\n  hook: hook\n} }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -1120,
+        1632
+      ],
+      "id": "979232ce-a2a2-4ae3-b017-e5a486aa3991",
+      "name": "Prompt Builder1"
+    },
+    {
+      "parameters": {
+        "jsCode": "let raw = $input.item.json.output;\n\nwhile (typeof raw === \"string\" && raw.trim().startsWith(\"{\")) {\n  try {\n    const parsed = JSON.parse(raw);\n    if (parsed.scene) {\n      raw = parsed.scene;\n    } else {\n      break;\n    }\n  } catch (e) {\n    const match = raw.match(/\"scene\"\\s*:\\s*\"([\\s\\S]+)/);\n    if (match) {\n      raw = match[1]\n        .replace(/\\\\n/g, \"\\n\")\n        .replace(/\\\\\"/g, '\"')\n        .replace(/\"\\s*}?\\s*$/, \"\");\n    }\n    break;\n  }\n}\n\nif (typeof raw === \"object\" && raw !== null && raw.scene) {\n  raw = raw.scene;\n}\n\nif (typeof raw === \"string\") {\n  raw = raw.trim();\n  if (raw.startsWith('\"') && raw.endsWith('\"')) {\n    raw = raw.slice(1, -1).replace(/\\\\n/g, \"\\n\").replace(/\\\\\"/g, '\"');\n  }\n}\n\nreturn [{ json: { scene: raw } }];"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -544,
+        1536
+      ],
+      "id": "7cc97787-5974-4446-91c7-c0065c583391",
+      "name": "Code in JavaScript3"
+    },
+    {
+      "parameters": {
+        "method": "PUT",
+        "url": "={{ $json.headers.location }}",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "video/mp4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3168,
+        1344
+      ],
+      "id": "7e67e8ae-6b04-4594-adb0-b08c261355e4",
+      "name": "Upload Video Bytes1",
+      "executeOnce": true,
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/youtube/v3/videos",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "uploadType",
+              "value": "resumable"
+            },
+            {
+              "name": "part",
+              "value": "snippet,status"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-Upload-Content-Type",
+              "value": "video/mp4"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"snippet\": {\n    \"title\": \"{{ $('Edit Fields1').first().json.title }}\",\n    \"description\": \"{{ $('Edit Fields1').first().json.description }}\",\n    \"categoryId\": \"27\"\n  },\n  \"status\": { \"privacyStatus\": \"public\" }\n}",
+        "options": {
+          "response": {
+            "response": {
+              "fullResponse": true,
+              "neverError": true
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        2720,
+        1344
+      ],
+      "id": "191b587b-70f2-4a87-8792-3e4b3bf9259d",
+      "name": "Start Upload1",
+      "executeOnce": true,
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "# [Math Unlocked](https://youtube.com/@mathunlockedyt?si=ZMyi8wQViiyA7iwk)",
+        "height": 1232,
+        "width": 6464,
+        "color": 4
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -1904,
+        816
+      ],
+      "typeVersion": 1,
+      "id": "c51cbe65-563e-4f27-9bfe-670bc9408dab",
+      "name": "Sticky Note4"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "17G1LQAQlGxqbyaRBb9Vi3X_JoeJjV6gcLdXWeGUYvb4",
+          "mode": "list",
+          "cachedResultName": "Math Unlocked",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17G1LQAQlGxqbyaRBb9Vi3X_JoeJjV6gcLdXWeGUYvb4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17G1LQAQlGxqbyaRBb9Vi3X_JoeJjV6gcLdXWeGUYvb4/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1568,
+        1440
+      ],
+      "id": "51ff8a39-e51f-4aa0-9644-4d845096da7e",
+      "name": "Math Unlocked Course",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jl5qgNTdM9DGXfgZ",
+          "name": "Google Sheets account | selwyn@selwynbuilds.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "17G1LQAQlGxqbyaRBb9Vi3X_JoeJjV6gcLdXWeGUYvb4",
+          "mode": "list",
+          "cachedResultName": "Math Unlocked",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17G1LQAQlGxqbyaRBb9Vi3X_JoeJjV6gcLdXWeGUYvb4/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/17G1LQAQlGxqbyaRBb9Vi3X_JoeJjV6gcLdXWeGUYvb4/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "topic_title": "={{ $json.topic_title }}",
+            "status": "done"
+          },
+          "matchingColumns": [
+            "topic_title"
+          ],
+          "schema": [
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "course_name",
+              "displayName": "course_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "sequence_number",
+              "displayName": "sequence_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "topic_title",
+              "displayName": "topic_title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -1120,
+        1440
+      ],
+      "id": "5a129cd9-e42d-49e7-b22a-17410bbf7ecc",
+      "name": "Math Unlocked Course Update",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jl5qgNTdM9DGXfgZ",
+          "name": "Google Sheets account | selwyn@selwynbuilds.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "playlistId": "PLMuZMEiE7nrI",
+        "videoId": "={{ $('Upload Video Bytes1').item.json.body.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        864
+      ],
+      "id": "a7e42e80-3ba3-4422-b321-abb5c5a0cc24",
+      "name": "Statistics from Scratch",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "http://192.168.1.135:8000/download",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2944,
+        1344
+      ],
+      "id": "745da9cb-3a59-495d-8a0f-ef74a29de672",
+      "name": "Download Video For Math Unlocked",
+      "executeOnce": true,
+      "notes": "Railway download result: \nhttps://automationforloveniche-production.up.railway.app/download"
+    },
+    {
+      "parameters": {
+        "url": "={{ $('Generate an image').first().json.data.urls.get }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer apikey-4195866550ff4037a1c9aa58d17f61aa"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3392,
+        1344
+      ],
+      "id": "9b79101e-df79-4d84-ad56-8e052d517459",
+      "name": "Get Thumbnail Image For Math Unlocked",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.data.outputs[0] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3616,
+        1344
+      ],
+      "id": "71ae64a1-aa46-46e5-bd91-31357c4494ba",
+      "name": "Download Image For Math Unlocked",
+      "executeOnce": true
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://www.googleapis.com/upload/youtube/v3/thumbnails/set",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "youTubeOAuth2Api",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "videoId",
+              "value": "={{ $('Upload Video Bytes1').item.json.body.id }}"
+            }
+          ]
+        },
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Content-Type",
+              "value": "image/png"
+            }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        3840,
+        1344
+      ],
+      "id": "fb0d3081-ce98-42bd-aaba-3e3e6e84d7d1",
+      "name": "Set Thumbnail For Math Unlocked",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "playlistId": "PLKmei85G5bUE",
+        "videoId": "={{ $('Upload Video Bytes1').item.json.body.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        1056
+      ],
+      "id": "68535815-6786-4151-8233-20092d6c2535",
+      "name": "Linear Algebra Visually",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $('Code in JavaScript2').item.json.course_name }}",
+                    "rightValue": "Statistics from Scratch",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "3bc15c05-36e0-4cf2-8dcc-ddb05f248cde"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "d02dd515-349b-426f-a661-618beca13b6e",
+                    "leftValue": "={{ $('Code in JavaScript2').item.json.course_name }}",
+                    "rightValue": "Linear Algebra Visually",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4fdba855-8db1-40d9-af94-7b29c0d32df4",
+                    "leftValue": "={{ $('Code in JavaScript2').item.json.course_name }}",
+                    "rightValue": "Calculus Intuition",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "161ab02c-4858-4b6d-b7b8-f8be629ce328",
+                    "leftValue": "={{ $('Code in JavaScript2').item.json.course_name }}",
+                    "rightValue": "Neural Networks from Zero",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "be506b52-f9ad-4edf-9aa4-f5cbd0d0871f",
+                    "leftValue": "={{ $('Code in JavaScript2').item.json.course_name }}",
+                    "rightValue": "PyTorch in Practice",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "4172774e-05eb-4d3b-b528-58816fd3800b",
+                    "leftValue": "={{ $('Code in JavaScript2').item.json.course_name }}",
+                    "rightValue": "Transformers Explained",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        4016,
+        1280
+      ],
+      "id": "c8a26f10-b269-4730-9b33-b66d58e7c1be",
+      "name": "Playlists Routing"
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "playlistId": "PLYlu9iyYvV_A",
+        "videoId": "={{ $('Upload Video Bytes1').item.json.body.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        1248
+      ],
+      "id": "ea9afb4c-e04c-4fab-b320-0f644b114c51",
+      "name": "Calculus Intuition",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "playlistId": "PLH6NIaBnSovQ",
+        "videoId": "={{ $('Upload Video Bytes1').item.json.body.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        1440
+      ],
+      "id": "8666bf5b-3adf-4745-837d-6895d6a948e0",
+      "name": "Neural Networks from Zero",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "playlistId": "PLV-n-1V5P0cA",
+        "videoId": "={{ $('Upload Video Bytes1').item.json.body.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        1632
+      ],
+      "id": "8ac4657b-f3f6-46fb-81cf-e687b240d10f",
+      "name": "PyTorch in Practice",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "playlistItem",
+        "playlistId": "PLaA7_ot8QaoY",
+        "videoId": "={{ $('Upload Video Bytes1').item.json.body.id }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [
+        4320,
+        1824
+      ],
+      "id": "d38013a7-f71a-434c-8c64-c70dd7b9fe98",
+      "name": "Transformers Explained",
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "id": "EskmkL3LkGLLphTa",
+          "name": "YouTube account | jaymeselwyn@gmail.com | Math Unlocked"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -1328,
+        272
+      ],
+      "id": "20bbf4e0-62f8-4407-8b47-0f3d8576808e",
+      "name": "When clicking ‘Execute workflow’ | Finance Reality Check"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * 2,5"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1792,
+        1440
+      ],
+      "id": "141091e1-7615-4538-9a7e-58fa29479853",
+      "name": "For Math Unlocked Courses"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 22 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1344,
+        1632
+      ],
+      "id": "c4c2482c-25be-4b93-9962-1ed78b64282d",
+      "name": "Random For Math Unlocked"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 22 * * *"
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1328,
+        464
+      ],
+      "id": "291d32c9-2119-48e7-be35-b3e9e5a402a3",
+      "name": "Random For Finance Reality Check"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Structured Output Parser1": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a file": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Trigger Video Generation": {
+      "main": [
+        [
+          {
+            "node": "Wait 60 seconds",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 60 seconds": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status": {
+      "main": [
+        [
+          {
+            "node": "Is Complete?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Complete?": {
+      "main": [
+        [
+          {
+            "node": "Start Upload",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait & Retry",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait & Retry": {
+      "main": [
+        [
+          {
+            "node": "Check Status",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge1": {
+      "main": [
+        [
+          {
+            "node": "Trigger Video Generation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Video Prompter",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Video Prompter": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Generate an image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request2": {
+      "main": [
+        [
+          {
+            "node": "Merge1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Get Image": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image1": {
+      "main": [
+        [
+          {
+            "node": "Wait 30 sec",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request2",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 30 sec",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 sec": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Get Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "For Financial Course": {
+      "main": [
+        [
+          {
+            "node": "Financial Reality Check Course",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript": {
+      "main": [
+        [
+          {
+            "node": "Financial Reality Check Course Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Financial Reality Check Course": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Financial Reality Check Course Update": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Video Prompter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech": {
+      "main": [
+        [
+          {
+            "node": "Edit a file",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Builder": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Video Prompter",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Error Trigger": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript1": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Thumbnail Image": {
+      "main": [
+        [
+          {
+            "node": "Download Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Thumbnail": {
+      "main": [
+        [
+          {
+            "node": "Personal Finance 101: Zero to Confident Playlist",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Video Bytes": {
+      "main": [
+        [
+          {
+            "node": "Get Thumbnail Image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Upload": {
+      "main": [
+        [
+          {
+            "node": "Download Video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video": {
+      "main": [
+        [
+          {
+            "node": "Upload Video Bytes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image": {
+      "main": [
+        [
+          {
+            "node": "Set Thumbnail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Structured Output Parser": {
+      "ai_outputParser": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_outputParser",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit a file1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Trigger Video Generation1": {
+      "main": [
+        [
+          {
+            "node": "Wait 60 seconds1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 60 seconds1": {
+      "main": [
+        [
+          {
+            "node": "Check Status1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check Status1": {
+      "main": [
+        [
+          {
+            "node": "Is Complete?1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Complete?1": {
+      "main": [
+        [
+          {
+            "node": "Start Upload1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait & Retry1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait & Retry1": {
+      "main": [
+        [
+          {
+            "node": "Check Status1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Trigger Video Generation1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent - Video Prompter1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model3": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent - Video Prompter1": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Generate an image",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request - Get Image1": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate an image": {
+      "main": [
+        [
+          {
+            "node": "Wait 30 sec1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait 30 sec1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 sec1": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request - Get Image1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript2": {
+      "main": [
+        [
+          {
+            "node": "Math Unlocked Course Update",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert text to speech1": {
+      "main": [
+        [
+          {
+            "node": "Edit a file1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "AI Agent1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prompt Builder1": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Video Prompter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code in JavaScript3": {
+      "main": [
+        [
+          {
+            "node": "Convert text to speech1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Video Bytes1": {
+      "main": [
+        [
+          {
+            "node": "Get Thumbnail Image For Math Unlocked",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Upload1": {
+      "main": [
+        [
+          {
+            "node": "Download Video For Math Unlocked",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Math Unlocked Course": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Math Unlocked Course Update": {
+      "main": [
+        [
+          {
+            "node": "AI Agent - Video Prompter1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Video For Math Unlocked": {
+      "main": [
+        [
+          {
+            "node": "Upload Video Bytes1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Thumbnail Image For Math Unlocked": {
+      "main": [
+        [
+          {
+            "node": "Download Image For Math Unlocked",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download Image For Math Unlocked": {
+      "main": [
+        [
+          {
+            "node": "Set Thumbnail For Math Unlocked",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Set Thumbnail For Math Unlocked": {
+      "main": [
+        [
+          {
+            "node": "Playlists Routing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Playlists Routing": {
+      "main": [
+        [
+          {
+            "node": "Statistics from Scratch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Linear Algebra Visually",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Calculus Intuition",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Neural Networks from Zero",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "PyTorch in Practice",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Transformers Explained",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "When clicking ‘Execute workflow’ | Finance Reality Check": {
+      "main": [
+        [
+          {
+            "node": "Prompt Builder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "For Math Unlocked Courses": {
+      "main": [
+        [
+          {
+            "node": "Math Unlocked Course",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Random For Math Unlocked": {
+      "main": [
+        [
+          {
+            "node": "Prompt Builder1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Random For Finance Reality Check": {
+      "main": [
+        [
+          {
+            "node": "Prompt Builder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "a0c17118-5ee7-4afd-be3d-e694d47085bb",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "50f485fc4b4c75a4f0d7dc1609e68642c60a7932f40dbae048dcb3798bc1c1e7"
+  },
+  "id": "x5NUOG4dmNSf1ILLxStsz",
+  "tags": []
+}

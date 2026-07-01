@@ -1,0 +1,22 @@
+# Video files (downloaded at runtime)
+*.mp4
+*.avi
+*.mov
+
+# Output files
+outputs/
+new_love.mp4
+new_love_cta.mp4
+
+# Temp files
+subtitles.srt
+*_transcription.json
+temp_*.mp4
+concat_*.mp4
+gameplay_looped.mp4
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env

@@ -1,0 +1,77 @@
+{
+  "font_name": "Montserrat Black",
+  "font_fallbacks": [
+    "Anton",
+    "Impact"
+  ],
+  "font_changes_by_type": true,
+  "font_rules": {
+    "single_word": "Bebas Neue Bold",
+    "phrase": "Montserrat SemiBold",
+    "sentence": "Montserrat Regular"
+  },
+  "isolated_word": {
+    "description": "Appears for emphasized dramatic moments",
+    "size_percent": 0.2,
+    "x_percent": 0.5,
+    "y_percent": 0.45,
+    "color_primary": "#FBC02D",
+    "color_highlight": "#FBC02D",
+    "colors_observed": [
+      "#FBC02D",
+      "#FFFFFF"
+    ],
+    "text_outline": "black 3px",
+    "text_shadow": "bottom-right 4px",
+    "text_glow": "none"
+  },
+  "phrase": {
+    "description": "Short phrases emphasizing key points",
+    "size_percent": 0.12,
+    "x_percent": 0.5,
+    "y_percent": 0.42,
+    "color_primary": "#FFFFFF",
+    "color_highlight": "#FBC02D",
+    "text_outline": "black 2px",
+    "text_shadow": "subtle, bottom-right 3px",
+    "positioning_variation": "usually centered, slight left/right offset for emphasis"
+  },
+  "sentence": {
+    "description": "Full sentences providing context or details",
+    "size_percent": 0.08,
+    "x_percent": 0.5,
+    "y_percent": 0.78,
+    "color_primary": "#FFFFFF",
+    "color_highlight": "#FBC02D",
+    "text_outline": "black 1px",
+    "text_shadow": "none",
+    "highlight_rule": "key noun or most important concept highlighted"
+  },
+  "max_words_per_block": 6,
+  "color_palette": [
+    "#FBC02D",
+    "#FFFFFF"
+  ],
+  "color_rules": {
+    "shock_single_word": "#FBC02D",
+    "reveal_phrase": "#FFFFFF",
+    "normal_text": "#FFFFFF",
+    "highlight_word": "#FBC02D",
+    "secondary_highlight": null
+  },
+  "frame_effects": {
+    "vignette": "yes",
+    "color_grade": "slightly warm tone",
+    "darkening_overlay": "yes"
+  },
+  "positioning_rules": {
+    "single_word": "centered at y=0.45",
+    "phrase": "centered or slight left/right offset at y=0.42",
+    "sentence": "bottom third y=0.78",
+    "horizontal_variation": "slight deviation for emphasis, up to 0.05 from center"
+  },
+  "highlight_pattern": "key words or concepts get highlighted",
+  "multi_element_layout": "phrases are dynamic with larger highlighted words, while sentences remain subdued",
+  "pacing_notes": "Single words: 0.5s, Phrases: 1s, Sentences: 1.5s",
+  "unique_observations": "Text often uses a blend of large isolated words and smaller supporting text for impact."
+}

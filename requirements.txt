@@ -1,0 +1,12 @@
+fastapi
+uvicorn[standard]
+requests
+openai-whisper
+ffmpeg-python
+tqdm
+numpy
+moviepy>=2.0.0
+python-dotenv
+openai
+opencv-python-headless
+Pillow
