@@ -4078,6 +4078,17 @@ config.pixel_width = 1920
 config.pixel_height = 1080
 config.frame_rate = 30
 config.frame_height = 8.0
+"""frame_width is set explicitly here rather than left to auto-derive from
+pixel_width/pixel_height. Manim does not reliably recompute its internal
+world-coordinate frame_width from new pixel dimensions on its own -- leaving
+this implicit caused animated content to stay confined to the OLD 16:9-shaped
+coordinate system even after pixel_width/pixel_height were correctly changed
+to a vertical 9:16 canvas, while the background (drawn directly in raw pixels)
+rendered correctly. Computing frame_width explicitly from the actual pixel
+aspect ratio, using the already-substituted pixel_width/pixel_height above,
+guarantees the Manim world always matches whatever canvas shape is rendering,
+landscape or vertical, without depending on Manim's internal defaults."""
+config.frame_width = config.frame_height * (config.pixel_width / config.pixel_height)
 
 
 def _finance_dashboard_background_group():
