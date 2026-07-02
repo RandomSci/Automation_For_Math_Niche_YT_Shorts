@@ -1406,11 +1406,12 @@ Channel: Math Unlocked Shorts, one mind-bending idea per video. Audience wants t
 === FONT BEHAVIOR ===
 The renderer uses Anton (ultra-condensed) as the primary font. This font is TALL and NARROW. All text is automatically rendered in ALL CAPS -- so write content in ALL CAPS.
 SIZE RULES (strictly enforced by renderer, mechanically clamped to these exact ranges -- do not undersize just because a smaller number "feels safer," a small element on this tall a canvas reads as broken/empty, not restrained):
-- Single impact word or number: {FONT_SIZE_IMPACT_MIN}-{FONT_SIZE_IMPACT_MAX}px. Centered or slightly off-center. This should feel like it OWNS the frame, not sit politely inside it.
+- Single impact word or number: {FONT_SIZE_IMPACT_MIN}-{FONT_SIZE_IMPACT_MAX}px. Centered or slightly off-center. Pick a size toward the MIDDLE of this range as your default -- reserve the top of the range for genuinely short words/numbers (1-4 characters). A long word at the top of this range can end up wider than the frame; the renderer will auto-shrink it to fit, but a word that gets auto-shrunk stops looking intentional. Judge size by how many characters the content actually has, not by a flat rule.
 - Sentence words (2+ words in a beat): {FONT_SIZE_SENTENCE_MIN}-{FONT_SIZE_SENTENCE_MAX}px each. Cascade across canvas.
-- number_counter elements: {FONT_SIZE_COUNTER_MIN}-{FONT_SIZE_COUNTER_MAX}px (numbers need to be the visual anchor of a data beat -- go toward the top of this range by default, this is a vertical video with a lot of height to fill).
+- number_counter elements: {FONT_SIZE_COUNTER_MIN}-{FONT_SIZE_COUNTER_MAX}px (numbers need to be the visual anchor of a data beat). Pick from the middle of this range by default; reserve the top only for very short numbers (1-3 digits) where a bigger size still leaves real breathing room on both sides.
+- No text element should ever visually span the full width of the frame edge to edge -- the renderer hard-caps every element's rendered width to 90% of canvas width and will shrink oversized text automatically, but the goal is text that reads as sized on purpose, not text that got rescued by a safety net.
 - DO NOT go above {FONT_SIZE_HARD_CAP}px for any element -- it will be clamped.
-- This is a TALL vertical canvas -- do not confine everything to one tiny centered dot in the middle. Use the height. A hero element can and should be large enough that it's the obvious, dominant thing on screen at a glance, not something a viewer has to lean in to find.
+- This is a TALL vertical canvas -- do not confine everything to one tiny centered dot in the middle. Use the height. A hero element can and should be large enough that it's the obvious, dominant thing on screen at a glance, not something a viewer has to lean in to find -- dominant is not the same as filling the entire frame.
 - Fewer elements per scene is better. 2-4 elements max. Dense scenes are unreadable.
 
 === YOUR RENDERING ENGINE ===
@@ -2755,6 +2756,28 @@ def render_text_overlay_opencv(video_path: str, scenes: list, beats: list,
         except:
             tw = size * len(content) * 0.55
             th = size
+
+        """A flat, word-count-based size range (e.g. 240-320px for a single
+        word) says nothing about how many CHARACTERS are in that word --
+        'PI' and 'INFINITY' both count as one word, but at the same font size
+        their rendered widths are wildly different. Without checking actual
+        rendered width against the canvas, a long single word at max size
+        can be wider than the frame itself, running off both edges no matter
+        where it's positioned -- repositioning cannot fix a word that is
+        simply too wide to fit. Hard cap rendered width to 90% of canvas
+        width, shrinking the font size (and re-measuring once) if needed."""
+        max_text_width = OUTPUT_WIDTH * 0.90
+        if tw > max_text_width and tw > 0:
+            shrink_ratio = max_text_width / tw
+            size = max(FONT_SIZE_FLOOR, int(size * shrink_ratio))
+            font = load_pil_font(get_primary_font_path(), size, weight)
+            try:
+                bbox = font.getbbox(content)
+                tw = bbox[2] - bbox[0]
+                th = bbox[3] - bbox[1]
+            except:
+                tw = size * len(content) * 0.55
+                th = size
 
         target_x = int(OUTPUT_WIDTH * x_pct)
         target_y = int(OUTPUT_HEIGHT * y_pct)
